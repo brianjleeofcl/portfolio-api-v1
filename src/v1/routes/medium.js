@@ -9,7 +9,7 @@ router.get('/@brianjleeofcl', (req, res, next) => {
       accept: 'text/html'
     }
   }).then(({data}) => {
-    const noscript = data.replace(/<script.*?<\/script>/gm, '')
+    const noscript = data.replace(/<script.*?<\/script>/gm, '').replace(/<\/head>/, '<base target="_blank" /></head>')
     res.send(noscript)
   })
 })

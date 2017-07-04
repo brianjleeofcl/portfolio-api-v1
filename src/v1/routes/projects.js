@@ -19,11 +19,10 @@ router.get('/', (req, res, next) => {
         web: homepage
       }
       return { title, desc: description, url }
-    })
+    });
 
-    console.log(projects);
-    res.send('')
-  })
-})
+    res.send(projects);
+  });
+});
 
 module.exports = router;

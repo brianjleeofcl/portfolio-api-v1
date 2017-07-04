@@ -4,23 +4,29 @@ const axios = require('axios');
 const titlify = require('title-case');
 
 router.get('/', (req, res, next) => {
-  axios.get('https://gist.githubusercontent.com/brianjleeofcl/3e195fe45a71373f33ba2de1e022893b/raw/cef0c75b0d1b786d666400e8bfd3e67a69113dfc/projects.txt').then(({data}) => {
-    const promises = data.replace(/\$/g, 'brianjleeofcl').split('\n').map(title => {
-      return axios.get(`https://api.github.com/repos/${title}`)
+  let img;
+
+  axios.get('https://gist.githubusercontent.com/brianjleeofcl/3e195fe45a71373f33ba2de1e022893b/raw/projects.txt').then(({data}) => {
+    const projects = data.replace(/\$/g, 'brianjleeofcl').split('\n').map(str => str.split(' '));
+    img = projects.map(project => project[1])
+    const promises = projects.map(project => {
+      return axios.get(`https://api.github.com/repos/${project[0]}`)
     });
 
     return Promise.all(promises)
   }).then(results => {
-    const projects = results.map(({data}) => {
+    const projects = results.map(({data}, i) => {
       const { html_url, homepage, name, description } = data
       const title = titlify(name);
       const url = {
         github: html_url,
-        web: homepage
+        site: homepage
       }
-      return { title, desc: description, url }
+      const res = { title, desc: description, url };
+      if (img[i]) res.img = img[i];
+      return res
     });
-
+    res.set('Access-Control-Allow-Origin', '*')
     res.send(projects);
   });
 });

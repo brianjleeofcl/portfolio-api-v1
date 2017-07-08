@@ -28,6 +28,9 @@ router.get('/', (req, res, next) => {
     });
     res.set('Access-Control-Allow-Origin', '*')
     res.send(projects);
+  }).catch(err => {
+    console.error(err)
+    res.next(boom.badImplementation(err.message, err))
   });
 });
 

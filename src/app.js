@@ -1,8 +1,8 @@
 const express = require('express');
-
 const app = express();
-
 const boom = require('boom');
+
+if (process.env.NODE_ENV !== 'production') require('dotenv').load()
 
 app.disable('x-powered-by');
 

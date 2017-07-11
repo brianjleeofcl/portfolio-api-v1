@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const titlify = require('title-case');
+const boom = require('boom')
 
 router.get('/', (req, res, next) => {
   let img;
@@ -10,7 +11,9 @@ router.get('/', (req, res, next) => {
     const projects = data.replace(/\$/g, 'brianjleeofcl').split('\n').map(str => str.split(' '));
     img = projects.map(project => project[1])
     const promises = projects.map(project => {
-      return axios.get(`https://api.github.com/repos/${project[0]}`)
+      return axios.get(`https://api.github.com/repos/${project[0]}`, {
+        'brianjleeofcl': process.env.GITHUB_ACCESS
+      })
     });
 
     return Promise.all(promises)

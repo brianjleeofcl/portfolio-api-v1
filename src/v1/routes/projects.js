@@ -12,7 +12,10 @@ router.get('/', (req, res, next) => {
     img = projects.map(project => project[1])
     const promises = projects.map(project => {
       return axios.get(`https://api.github.com/repos/${project[0]}`, {
-        'brianjleeofcl': process.env.GITHUB_ACCESS
+        auth: {
+          username: 'brianjleeofcl',
+          password: process.env.GITHUB_ACCESS
+        }
       })
     });
 

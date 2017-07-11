@@ -6,7 +6,7 @@ if (process.env.NODE_ENV !== 'production') require('dotenv').load()
 
 app.disable('x-powered-by');
 
-app.use(require('morgan')('dev'));
+app.use(require('morgan')('dev'), require('body-parser').text());
 
 app.use('/v1',require('./v1/api'));
 
